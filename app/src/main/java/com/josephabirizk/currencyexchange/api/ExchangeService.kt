@@ -1,4 +1,5 @@
 package com.josephabirizk.currencyexchange.api
+
 import com.josephabirizk.currencyexchange.api.model.ExchangeRates
 import com.josephabirizk.currencyexchange.api.model.Transaction
 import com.josephabirizk.currencyexchange.api.model.User
@@ -26,10 +27,11 @@ object ExchangeService {
         fun getExchangeRates(): Call<ExchangeRates>
 
         @POST("/transaction")
-        fun addTransaction(@Body transaction: Transaction, @Header("Authorization") authorization: String?): Call<Any>
+        fun addTransaction(@Body transaction: Transaction,
+                           @Header("Authorization") authorization: String?): Call<Any>
         @GET("/transaction")
-        fun getTransactions(@Header("Authorization") authorization: String): Call<List<Transaction>>
-
+        fun getTransactions(@Header("Authorization") authorization: String):
+                Call<List<Transaction>>
 
         @POST("/user")
         fun addUser(@Body user: User): Call<User>

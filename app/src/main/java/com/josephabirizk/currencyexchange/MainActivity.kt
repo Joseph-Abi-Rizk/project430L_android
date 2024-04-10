@@ -31,8 +31,6 @@ import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
-    private var buyUsdTextView: TextView? = null
-    private var sellUsdTextView: TextView? = null
     private var fab: FloatingActionButton? = null
     private var transactionDialog: View? = null
     private var menu: Menu? = null
@@ -63,6 +61,23 @@ class MainActivity : AppCompatActivity() {
         menu?.clear()
         menuInflater.inflate(if(Authentication.getToken() == null)
             R.menu.menu_logged_out else R.menu.menu_logged_in, menu)
+    }
+
+    private fun addTransaction(transaction: Transaction) {
+
+        ExchangeService.exchangeApi().addTransaction(transaction, "Bearer ${Authentication.getToken()}" ).enqueue(object : Callback<Any> {
+            override fun onResponse(call: Call<Any>, response:
+            Response<Any>) {
+                Snackbar.make(fab as View, "Transaction added!",
+                    Snackbar.LENGTH_LONG)
+                    .show()
+            }
+            override fun onFailure(call: Call<Any>, t: Throwable) {
+                Snackbar.make(fab as View, "Could not add transaction.",
+                    Snackbar.LENGTH_LONG)
+                    .show()
+            }
+        })
     }
 
 
@@ -96,38 +111,9 @@ class MainActivity : AppCompatActivity() {
             }
             .show()
     }
-    private fun fetchRates(){
-        ExchangeService.exchangeApi().getExchangeRates().enqueue(object :
-            Callback<ExchangeRates> {
-            override fun onResponse(call: Call<ExchangeRates>, response: Response<ExchangeRates>) {
-                val responseBody: ExchangeRates? = response.body();
-                buyUsdTextView?.text = responseBody?.usdToLbp.toString()
-                sellUsdTextView?.text = responseBody?.lbpToUsd.toString()
-            }
-            override fun onFailure(call: Call<ExchangeRates>, t: Throwable) {
-                return;
-                //TODO("Not yet implemented")
-            }
-        })
-    }
 
-    private fun addTransaction(transaction: Transaction) {
 
-        ExchangeService.exchangeApi().addTransaction(transaction, if (Authentication.getToken() != null) "Bearer${Authentication.getToken()}" else null).enqueue(object :
-            Callback<Any> {
-            override fun onResponse(call: Call<Any>, response:
-            Response<Any>) {
-                Snackbar.make(fab as View, "Transaction added!",
-                    Snackbar.LENGTH_LONG)
-                    .show()
-            }
-            override fun onFailure(call: Call<Any>, t: Throwable) {
-                Snackbar.make(fab as View, "Could not add transaction.",
-                    Snackbar.LENGTH_LONG)
-                    .show()
-            }
-        })
-    }
+
 
 
 

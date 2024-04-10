@@ -11,5 +11,5 @@ class Transaction() {
     @SerializedName("usd_to_lbp")
     var usdToLbp: Boolean? = null
     @SerializedName("added_date")
-    var addedDate: Date?= null
+    var addedDate: String?= null
 }

@@ -1,6 +1,7 @@
 package com.josephabirizk.currencyexchange
 
 import androidx.appcompat.app.AppCompatActivity
+import com.josephabirizk.currencyexchange.MainActivity
 import android.os.Bundle
 import com.josephabirizk.currencyexchange.api.ExchangeService
 import com.google.android.material.snackbar.Snackbar
