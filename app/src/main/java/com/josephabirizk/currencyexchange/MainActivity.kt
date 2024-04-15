@@ -139,10 +139,16 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(tabLayout!!, tabsViewPager!!) { tab, position ->
             when (position) {
                 0 -> {
-                    tab.text = "Exchange"
+                    tab.text = "Wallet"
                 }
                 1 -> {
+                    tab.text = "Exchange"
+                }
+                2 -> {
                     tab.text = "Transactions"
+                }
+                3 -> {
+                    tab.text = "Statistics"
                 }
             }
         }.attach()

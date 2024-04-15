@@ -71,8 +71,9 @@ class TransactionsFragment : Fragment() {
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
-        fetchTransactions()
         super.onCreate(savedInstanceState)
+        fetchTransactions()
+
 
     }
 
@@ -87,6 +88,8 @@ class TransactionsFragment : Fragment() {
         listview = view.findViewById(R.id.listview)
         adapter = TransactionAdapter(layoutInflater, transactions!!)
         listview?.adapter = adapter
+
+
 
 
 

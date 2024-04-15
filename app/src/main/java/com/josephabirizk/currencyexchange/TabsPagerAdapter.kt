@@ -10,15 +10,24 @@ class TabsPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle) :
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> {
-                ExchangeFragment()
+                WalletFragment()
             }
             1 -> {
+                ExchangeFragment()
+            }
+
+            2 -> {
                 TransactionsFragment()
             }
+
+            3-> {
+                StatisticsFragment()
+            }
+
             else -> ExchangeFragment()
         }
     }
     override fun getItemCount(): Int {
-        return 2
+        return 4
     }
 }
