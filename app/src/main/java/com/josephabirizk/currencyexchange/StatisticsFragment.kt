@@ -5,55 +5,87 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.josephabirizk.currencyexchange.api.Authentication
+import com.josephabirizk.currencyexchange.api.ExchangeService
+import com.josephabirizk.currencyexchange.api.model.GraphLists
+import com.josephabirizk.currencyexchange.api.model.Wallet
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-/**
- * A simple [Fragment] subclass.
- * Use the [StatisticsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class StatisticsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var chartBuy: LineChart
+    private lateinit var chartSell: LineChart
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+
+    }
+    //from chat to convert pairs to entries
+    fun convertPairsToEntries(pairs: List<Pair<String, Float>>?): List<Entry> {
+        // Handle the case where pairs might be null
+        if (pairs == null) return emptyList()
+
+        // Convert each pair to an Entry, using the index as the x value
+        return pairs.mapIndexed { index, pair ->
+            Entry(index.toFloat(), pair.second)
         }
     }
+
+
+    private fun getGraphs(){
+        ExchangeService.exchangeApi().get_graphs().enqueue(object :
+            Callback<GraphLists> {
+            override fun onResponse(call: Call<GraphLists>, response: Response<GraphLists>) {
+                val responseBody: GraphLists? = response.body();
+                //asked chat how to join lists
+                val sellRates = responseBody?.usd_to_lbp_x_axis?.zip(responseBody.usd_to_lbp_y_axis?: listOf())
+                val buyRates = responseBody?.lbp_to_usd_x_axis?.zip(responseBody.lbp_to_usd_y_axis?: listOf())
+
+                setupChart(chartBuy,convertPairsToEntries(buyRates))
+                setupChart(chartSell, convertPairsToEntries(sellRates))
+
+
+            }
+            override fun onFailure(call: Call<GraphLists>, t: Throwable) {
+                return;
+            }
+        })
+    }
+
+
+    private fun setupChart(chart: LineChart, data: List<Entry>) {
+        val lineDataSet = LineDataSet(data, "Label")
+        val lineData = LineData(lineDataSet)
+        chart.data = lineData
+        chart.invalidate() // refresh chart
+    }
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_statistics, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_statistics, container, false)
+        chartBuy = view.findViewById(R.id.buy_usd_rate_chart)
+        chartSell = view.findViewById(R.id.sell_usd_rate_chart)
+        getGraphs()
+
+
+        return view
+
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment StatisticsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            StatisticsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+
+
+
 }

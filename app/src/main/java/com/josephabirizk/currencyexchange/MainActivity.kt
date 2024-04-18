@@ -31,8 +31,7 @@ import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity() {
-    private var fab: FloatingActionButton? = null
-    private var transactionDialog: View? = null
+
     private var menu: Menu? = null
     private var tabLayout: TabLayout? = null
     private var tabsViewPager: ViewPager2? = null
@@ -63,54 +62,7 @@ class MainActivity : AppCompatActivity() {
             R.menu.menu_logged_out else R.menu.menu_logged_in, menu)
     }
 
-    private fun addTransaction(transaction: Transaction) {
 
-        ExchangeService.exchangeApi().addTransaction(transaction, "Bearer ${Authentication.getToken()}" ).enqueue(object : Callback<Any> {
-            override fun onResponse(call: Call<Any>, response:
-            Response<Any>) {
-                Snackbar.make(fab as View, "Transaction added!",
-                    Snackbar.LENGTH_LONG)
-                    .show()
-            }
-            override fun onFailure(call: Call<Any>, t: Throwable) {
-                Snackbar.make(fab as View, "Could not add transaction.",
-                    Snackbar.LENGTH_LONG)
-                    .show()
-            }
-        })
-    }
-
-
-    private fun showDialog() {
-        transactionDialog = LayoutInflater.from(this)
-            .inflate(R.layout.dialog_transaction, null, false)
-        MaterialAlertDialogBuilder(this).setView(transactionDialog)
-            .setTitle("Add Transaction")
-            .setMessage("Enter transaction details")
-            .setPositiveButton("Add") { dialog, _ ->
-                val usdAmount = transactionDialog?.findViewById<TextInputLayout>(R.id.txtInptUsdAmount)?.editText?.text.toString().toFloat()
-                val lbpAmount = transactionDialog?.findViewById<TextInputLayout>(R.id.txtInptLbpAmount)?.editText?.text.toString().toFloat()
-
-                val trans = transactionDialog?.findViewById<RadioGroup>(R.id.rdGrpTransactionType)
-                val trans_id = trans?.checkedRadioButtonId
-                val transType = when (trans_id) {
-                    R.id.rdBtnBuyUsd -> true
-                    R.id.rdBtnSellUsd -> false
-                    else->false
-                }
-
-                val transaction = Transaction()
-                transaction.usdAmount=usdAmount
-                transaction.lbpAmount=lbpAmount
-                transaction.usdToLbp=transType
-                addTransaction(transaction)
-                dialog.dismiss()
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
-    }
 
 
 
@@ -122,10 +74,6 @@ class MainActivity : AppCompatActivity() {
         Authentication.initialize(this)
         setContentView(R.layout.activity_main)
 
-        fab = findViewById(R.id.fab)
-        fab?.setOnClickListener { view ->
-            showDialog()
-        }
 
         tabLayout = findViewById(R.id.tabLayout)
         tabsViewPager = findViewById(R.id.tabsViewPager)

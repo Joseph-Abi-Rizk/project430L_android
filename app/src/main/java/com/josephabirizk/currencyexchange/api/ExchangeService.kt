@@ -1,10 +1,12 @@
 package com.josephabirizk.currencyexchange.api
 
 import com.josephabirizk.currencyexchange.api.model.ExchangeRates
+import com.josephabirizk.currencyexchange.api.model.GraphLists
 import com.josephabirizk.currencyexchange.api.model.Transaction
 import com.josephabirizk.currencyexchange.api.model.User
 import com.josephabirizk.currencyexchange.api.model.Token
 import com.josephabirizk.currencyexchange.api.model.Wallet
+import com.josephabirizk.currencyexchange.api.model.Wallet_money
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -44,5 +46,11 @@ object ExchangeService {
         fun handle_wallet(@Header("Authorization") authorization: String):
                 Call<Wallet>
 
+        @POST("/wallet")
+        fun addMoney(@Body wallet_money: Wallet_money,
+                     @Header("Authorization") authorization: String?): Call<Any>
+
+        @GET("getGraph")
+        fun get_graphs():Call<GraphLists>
     }
 }

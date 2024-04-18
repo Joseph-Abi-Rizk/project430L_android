@@ -17,6 +17,12 @@ import retrofit2.Response
 
 import android.widget.EditText
 import android.widget.RadioButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
+import com.josephabirizk.currencyexchange.api.Authentication
+import com.josephabirizk.currencyexchange.api.model.Transaction
 
 
 class ExchangeFragment : Fragment() {
@@ -26,6 +32,9 @@ class ExchangeFragment : Fragment() {
     private var calc_out: TextView? = null
     private var calc_btn: Button?= null
     private var trans: RadioGroup?= null
+
+    private var fab: FloatingActionButton? = null
+    private var transactionDialog: View? = null
 
 
     override fun onResume() {
@@ -51,9 +60,7 @@ class ExchangeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
-
+        fetchRates()
 
     }
     private fun perform_caclulation(){
@@ -78,6 +85,56 @@ class ExchangeFragment : Fragment() {
 
     }
 
+    private fun addTransaction(transaction: Transaction) {
+
+        ExchangeService.exchangeApi().addTransaction(transaction, "Bearer ${Authentication.getToken()}" ).enqueue(object : Callback<Any> {
+            override fun onResponse(call: Call<Any>, response:
+            Response<Any>) {
+                Snackbar.make(fab as View, "Transaction added!",
+                    Snackbar.LENGTH_LONG)
+                    .show()
+                fetchRates()
+            }
+            override fun onFailure(call: Call<Any>, t: Throwable) {
+                Snackbar.make(fab as View, "Could not add transaction.",
+                    Snackbar.LENGTH_LONG)
+                    .show()
+            }
+        })
+    }
+
+
+    private fun showDialog() {
+        transactionDialog = LayoutInflater.from(requireActivity())
+            .inflate(R.layout.dialog_transaction, null, false)
+        MaterialAlertDialogBuilder(requireActivity()).setView(transactionDialog)
+            .setTitle("Add Transaction")
+            .setMessage("Enter transaction details")
+            .setPositiveButton("Add") { dialog, _ ->
+                val usdAmount = transactionDialog?.findViewById<TextInputLayout>(R.id.txtInptUsdAmount)?.editText?.text.toString().toFloat()
+                val lbpAmount = transactionDialog?.findViewById<TextInputLayout>(R.id.txtInptLbpAmount)?.editText?.text.toString().toFloat()
+
+                val trans = transactionDialog?.findViewById<RadioGroup>(R.id.rdGrpTransactionType)
+                val trans_id = trans?.checkedRadioButtonId
+                val transType = when (trans_id) {
+                    R.id.rdBtnBuyUsd -> true
+                    R.id.rdBtnSellUsd -> false
+                    else->false
+                }
+
+                val transaction = Transaction()
+                transaction.usdAmount=usdAmount
+                transaction.lbpAmount=lbpAmount
+                transaction.usdToLbp=transType
+                addTransaction(transaction)
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -85,6 +142,11 @@ class ExchangeFragment : Fragment() {
         // Inflate the layout for this fragment
         var view: View = inflater.inflate(R.layout.fragment_exchange,
             container, false)
+
+        fab = view.findViewById(R.id.fab)
+        fab?.setOnClickListener { view ->
+            showDialog()
+        }
         buyUsdTextView = view.findViewById(R.id.txtBuyUsdRate)
         sellUsdTextView = view.findViewById(R.id.txtSellUsdRate)
 
