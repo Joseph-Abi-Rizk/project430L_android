@@ -28,6 +28,12 @@ class ExchangeFragment : Fragment() {
     private var trans: RadioGroup?= null
 
 
+    override fun onResume() {
+        super.onResume()
+        fetchRates()
+    }
+
+
     private fun fetchRates(){
         ExchangeService.exchangeApi().getExchangeRates().enqueue(object :
             Callback<ExchangeRates> {
@@ -45,7 +51,7 @@ class ExchangeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fetchRates()
+
 
 
 

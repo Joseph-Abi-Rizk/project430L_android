@@ -4,6 +4,7 @@ import com.josephabirizk.currencyexchange.api.model.ExchangeRates
 import com.josephabirizk.currencyexchange.api.model.Transaction
 import com.josephabirizk.currencyexchange.api.model.User
 import com.josephabirizk.currencyexchange.api.model.Token
+import com.josephabirizk.currencyexchange.api.model.Wallet
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -38,6 +39,10 @@ object ExchangeService {
 
         @POST("/authentication")
         fun authenticate(@Body user:User): Call<Token>
+
+        @GET("/wallet")
+        fun handle_wallet(@Header("Authorization") authorization: String):
+                Call<Wallet>
 
     }
 }

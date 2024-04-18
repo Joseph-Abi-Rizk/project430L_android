@@ -5,55 +5,61 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
+import com.josephabirizk.currencyexchange.api.Authentication
+import com.josephabirizk.currencyexchange.api.ExchangeService
+import com.josephabirizk.currencyexchange.api.model.ExchangeRates
+import com.josephabirizk.currencyexchange.api.model.Wallet
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [WalletFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class WalletFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
+    private var usd_Ballance: TextView? = null
+    private var lbp_Ballance: TextView? = null
+    private var add_money_button: Button? = null
+
+    //asked chat
+    override fun onResume() {
+        super.onResume()
+        fetchWallet()  // Call your data refreshing method here
+    }
+
+    private fun fetchWallet(){
+        ExchangeService.exchangeApi().handle_wallet("Bearer ${Authentication.getToken()}").enqueue(object :
+            Callback<Wallet> {
+            override fun onResponse(call: Call<Wallet>, response: Response<Wallet>) {
+                val responseBody: Wallet? = response.body();
+                usd_Ballance?.text = responseBody?.usdBalance.toString()
+                lbp_Ballance?.text = responseBody?.lbpBalance.toString()
+            }
+            override fun onFailure(call: Call<Wallet>, t: Throwable) {
+                return;
+            }
+        })
+    }
+
+    // not useful after using onResume but left in case might use later
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_wallet, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_wallet, container, false)
+         lbp_Ballance= view.findViewById(R.id.txtLbpBallance)
+        usd_Ballance= view.findViewById(R.id.txtUsdBallance)
+
+
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment WalletFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            WalletFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
+
 }

@@ -1,8 +1,8 @@
 package com.josephabirizk.currencyexchange.api.model
 import com.google.gson.annotations.SerializedName
 class ExchangeRates {
-    @SerializedName("usdtolbp")
+    @SerializedName("usd_to_lbp")
     var usdToLbp: Float? = null
-    @SerializedName("lbptousd")
+    @SerializedName("lbp_to_usd")
     var lbpToUsd: Float? = null
 }

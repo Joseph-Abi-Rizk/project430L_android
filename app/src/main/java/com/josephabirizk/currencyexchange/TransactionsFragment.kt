@@ -51,6 +51,24 @@ class TransactionsFragment : Fragment() {
     private var transactions: ArrayList<Transaction>? = ArrayList()
     private var adapter: TransactionAdapter? = null
 
+    override fun onResume() {
+        super.onResume()
+        fetchTransactions()
+    }
+
+    private fun addtransactions(list: List<Transaction>?){
+        if (list != null) {
+            for (element in list){
+                if (!transactions?.contains(element)!!){
+                    transactions!!.add(element)
+                }
+
+            }
+
+        }
+        return
+
+    }
     private fun fetchTransactions() {
         if (Authentication.getToken() != null) {
             ExchangeService.exchangeApi()
@@ -60,7 +78,7 @@ class TransactionsFragment : Fragment() {
                         call: Call<List<Transaction>>,
                         response: Response<List<Transaction>>
                     ) {
-                        transactions?.addAll(response.body()!!)
+                        addtransactions(response.body()!!)
                         adapter?.notifyDataSetChanged()
                     }
                     override fun onFailure(call: Call<List<Transaction>>,
@@ -72,8 +90,6 @@ class TransactionsFragment : Fragment() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fetchTransactions()
-
 
     }
 
