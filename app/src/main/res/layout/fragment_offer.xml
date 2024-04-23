@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Spinner
+        android:id="@+id/spinner_buy_usd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/buy_usd_options"/>
+
+    <EditText
+        android:id="@+id/offer_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Amount"
+        android:inputType="numberDecimal"/>
+
+    <EditText
+        android:id="@+id/offer_rate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Rate"
+        android:inputType="numberDecimal"/>
+
+    <EditText
+        android:id="@+id/offer_deadline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select Deadline"
+        android:focusable="false"
+        android:cursorVisible="false"
+        android:onClick="showDatePickerDialog"/>
+
+    <Button
+        android:id="@+id/offer_submit_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit Offer"/>
+
+</LinearLayout>

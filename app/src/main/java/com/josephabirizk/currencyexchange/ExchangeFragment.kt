@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 
 import android.view.ViewGroup
+import android.webkit.WebView
 import android.widget.RadioGroup
 import android.widget.TextView
 import retrofit2.Call
@@ -17,12 +18,14 @@ import retrofit2.Response
 
 import android.widget.EditText
 import android.widget.RadioButton
+import android.widget.Toast
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.josephabirizk.currencyexchange.api.Authentication
 import com.josephabirizk.currencyexchange.api.model.Transaction
+import java.text.DecimalFormat
 
 
 class ExchangeFragment : Fragment() {
@@ -47,14 +50,21 @@ class ExchangeFragment : Fragment() {
         ExchangeService.exchangeApi().getExchangeRates().enqueue(object :
             Callback<ExchangeRates> {
             override fun onResponse(call: Call<ExchangeRates>, response: Response<ExchangeRates>) {
-                val responseBody: ExchangeRates? = response.body();
-                buyUsdTextView?.text = responseBody?.usdToLbp.toString()
-                sellUsdTextView?.text = responseBody?.lbpToUsd.toString()
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    val decimalFormat = DecimalFormat("#.###")
+                    val formattedUSDTOLBP = decimalFormat.format(responseBody?.usdToLbp)
+                    val formattedLBPTOUSD = decimalFormat.format(responseBody?.lbpToUsd)
+                    buyUsdTextView?.text = formattedUSDTOLBP
+                    sellUsdTextView?.text = formattedLBPTOUSD
+                } else {
+                    Toast.makeText(context, "Failed to load rates: ${response.code()}", Toast.LENGTH_LONG).show()
+                }
             }
             override fun onFailure(call: Call<ExchangeRates>, t: Throwable) {
-                return;
-                //TODO("Not yet implemented")
+                //no need
             }
+
         })
     }
 
@@ -135,6 +145,8 @@ class ExchangeFragment : Fragment() {
             .show()
     }
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -157,8 +169,12 @@ class ExchangeFragment : Fragment() {
         calc_btn =  view.findViewById(R.id.calculator_btn)
 
 
-        calc_btn?.setOnClickListener { view->
-            perform_caclulation()
+        calc_btn?.setOnClickListener {
+            if (calc_in?.text.toString().isNotEmpty()) {
+                perform_caclulation()
+            } else {
+                Toast.makeText(context, "Please enter an amount to calculate", Toast.LENGTH_SHORT).show()
+            }
         }
 
 

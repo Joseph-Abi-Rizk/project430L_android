@@ -2,9 +2,11 @@ package com.josephabirizk.currencyexchange.api
 
 import com.josephabirizk.currencyexchange.api.model.ExchangeRates
 import com.josephabirizk.currencyexchange.api.model.GraphLists
+import com.josephabirizk.currencyexchange.api.model.Offer
 import com.josephabirizk.currencyexchange.api.model.Transaction
 import com.josephabirizk.currencyexchange.api.model.User
 import com.josephabirizk.currencyexchange.api.model.Token
+import com.josephabirizk.currencyexchange.api.model.Transfer
 import com.josephabirizk.currencyexchange.api.model.Wallet
 import com.josephabirizk.currencyexchange.api.model.Wallet_money
 import retrofit2.Call
@@ -50,7 +52,15 @@ object ExchangeService {
         fun addMoney(@Body wallet_money: Wallet_money,
                      @Header("Authorization") authorization: String?): Call<Any>
 
-        @GET("getGraph")
+        @GET("/getGraph")
         fun get_graphs():Call<GraphLists>
+
+        @POST("/makeOffer")
+        fun makeOffer(@Body offer: Offer,
+                      @Header("Authorization") authorization: String?): Call<Any>
+
+        @POST("/transfer")
+        fun transfer(@Body transfer: Transfer,
+                     @Header("Authorization") authorization: String?): Call<Any>
     }
 }

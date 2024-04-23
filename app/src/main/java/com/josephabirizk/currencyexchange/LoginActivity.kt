@@ -21,6 +21,7 @@ class LoginActivity : AppCompatActivity() {
     private var usernameEditText: TextInputLayout? = null
     private var passwordEditText: TextInputLayout? = null
     private var loginButton: Button? = null
+    private var BackButton: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +30,11 @@ class LoginActivity : AppCompatActivity() {
         usernameEditText = findViewById(R.id.txtInptUsername)
         passwordEditText = findViewById(R.id.txtInptPassword)
         loginButton = findViewById(R.id.btnLogin)
+        BackButton = findViewById(R.id.btnBack)
+
+        BackButton?.setOnClickListener { view ->
+            navigateToMainPage()
+        }
 
         loginButton?.setOnClickListener { view ->
             performLogin()

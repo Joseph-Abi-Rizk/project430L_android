@@ -3,7 +3,7 @@
     <style name="Base.Theme.CurrencyExchange" parent="Theme.Material3.DayNight">
         <!-- Customize your light theme here. -->
         <item name="colorOnSecondary">@android:color/white</item>
-        <item name="colorSecondary">@color/purple_500</item>
+        <item name="colorSecondary">@color/grey</item>
 
     </style>
 

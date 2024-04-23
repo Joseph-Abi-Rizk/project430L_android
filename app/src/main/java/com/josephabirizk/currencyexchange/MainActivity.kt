@@ -98,8 +98,13 @@ class MainActivity : AppCompatActivity() {
                 3 -> {
                     tab.text = "Statistics"
                 }
+                4 -> {
+                    tab.text = "Offer"
+                }
             }
         }.attach()
+
+        tabsViewPager?.setCurrentItem(1, false)
 
 
 

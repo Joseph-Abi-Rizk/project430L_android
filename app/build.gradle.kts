@@ -36,6 +36,8 @@ android {
 }
 
 dependencies {
+    //got implementation from youtube channel called code with Laxu
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
     implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")

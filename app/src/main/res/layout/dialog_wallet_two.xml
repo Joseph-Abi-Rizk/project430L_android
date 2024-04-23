@@ -10,11 +10,10 @@
         android:id="@+id/btnTabOne"
         android:layout_width="0dp"
         android:layout_height="59dp"
-        android:background="@drawable/wallet_button"
-        android:rotationY="35"
         android:text="Add Money"
-        app:layout_constraintEnd_toStartOf="@id/btnTabTwo"
+        android:background="@drawable/wallet_button"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnTabTwo"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -23,6 +22,7 @@
         android:layout_width="0dp"
         android:layout_height="59dp"
         android:text="Transfer Money"
+        android:rotationY="35"
         android:background="@drawable/wallet_button"
         app:layout_constraintStart_toEndOf="@id/btnTabOne"
         app:layout_constraintEnd_toStartOf="@id/btnTabThree"
@@ -42,11 +42,11 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtInptCreditCard"
+        android:id="@+id/txtInptUser"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ADD Credit Card"
+        android:hint="ADD USER TO TRANSFER MONEY TO"
         app:layout_constraintTop_toBottomOf="@id/btnTabOne"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -65,7 +65,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="ADD USD Amount"
-        app:layout_constraintTop_toBottomOf="@id/txtInptCreditCard"
+        app:layout_constraintTop_toBottomOf="@id/txtInptUser"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
